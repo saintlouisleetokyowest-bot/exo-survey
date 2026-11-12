@@ -105,7 +105,7 @@
       <p class="text-sm text-slate-400">率直なご感想をお聞かせください。<br>所要時間: 約2分</p>
     </div>
 
-    <form id="surveyForm" onsubmit="submitForm(event)" class="space-y-6">
+    <form id="surveyForm" onsubmit="submitForm(event)" class="space-y-6" novalidate>
       
       <!-- Section 1: Basic Info -->
       <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
@@ -348,6 +348,7 @@
       </section>
 
       <!-- Submit Button -->
+      <p id="formError" class="hidden text-sm text-red-400 text-center bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3"></p>
       <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-darkbg font-bold rounded-xl text-lg shadow-lg shadow-emerald-500/20 transition transform active:scale-95 flex justify-center items-center gap-2">
         <span>アンケートを送信する</span>
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -445,11 +446,43 @@
       openModal('qrModal');
     }
 
+    function showFormError(message, focusEl) {
+      const box = document.getElementById('formError');
+      box.textContent = message;
+      box.classList.remove('hidden');
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (focusEl) {
+        focusEl.focus({ preventScroll: true });
+        focusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function hideFormError() {
+      const box = document.getElementById('formError');
+      box.classList.add('hidden');
+      box.textContent = '';
+    }
+
     // Form Submission Logic
     async function submitForm(e) {
       e.preventDefault();
+      hideFormError();
 
       const form = document.getElementById('surveyForm');
+      const nameInput = form.querySelector('[name="name"]');
+      const emailInput = form.querySelector('[name="email"]');
+      const name = (nameInput.value || '').trim();
+      const email = (emailInput.value || '').trim();
+
+      if (!name) {
+        showFormError('お名前（または貴社名）を入力してください。', nameInput);
+        return;
+      }
+      if (!email || !emailInput.checkValidity()) {
+        showFormError('正しいメールアドレスを入力してください。', emailInput);
+        return;
+      }
+
       const formData = new FormData(form);
       
       const getMulti = (name) => {
@@ -476,8 +509,8 @@
         _subject: '【展会问卷】次世代アシストスーツ 新しい回答',
         _template: 'table',
         _captcha: 'false',
-        name: formData.get('name'),
-        email: formData.get('email'),
+        name,
+        email,
         industry,
         position,
         age: formData.get('age') || '',
@@ -512,8 +545,13 @@
         });
 
         const result = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          throw new Error(result.message || 'submit failed');
+        const ok = res.ok && (result.success === true || result.success === 'true');
+        if (!ok) {
+          const msg = result.message || '';
+          if (/activat/i.test(msg)) {
+            throw new Error('受信メールの確認が未完了です。saintlouislee.tokyowest@gmail.com の「Activate Form」リンクを開いてから、もう一度送信してください。');
+          }
+          throw new Error(msg || 'submit failed');
         }
 
         form.classList.add('hidden');
@@ -522,7 +560,7 @@
 
       } catch (error) {
         console.error('Error submitting form:', error);
-        alert('送信に失敗しました。ネットワーク状況を確認して、もう一度お試しください。');
+        showFormError(error.message || '送信に失敗しました。ネットワーク状況を確認して、もう一度お試しください。');
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
