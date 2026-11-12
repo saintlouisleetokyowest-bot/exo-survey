@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>次世代アシストスーツ 試着体験アンケート</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkbg: '#0b0f19',
+            cardbg: '#161e2e',
+            borderdark: '#26334d',
+            emerald: {
+              400: '#34d399',
+              500: '#10b981',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .glass-card {
+      background: rgba(22, 30, 46, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Custom styling for hidden radio/checkbox with sibling selector */
+    .chip-input:checked + .chip-label {
+      border-color: #10b981;
+      background-color: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+    }
+    .chip-input:checked + .chip-label .check-icon {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .check-icon {
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s ease-in-out;
+    }
+    
+    /* Smooth transitions */
+    .expandable {
+      transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, margin 0.3s ease-in-out;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    .expandable.open {
+      max-height: 200px;
+      opacity: 1;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-12 font-sans selection:bg-emerald-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-darkbg/90 backdrop-blur-md border-b border-borderdark">
+    <div class="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-darkbg font-bold">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <span class="font-bold text-sm tracking-wider text-gray-100 hidden sm:block">EXO-SURVEY</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="openModal('webhookModal')" class="p-2 rounded-lg bg-cardbg border border-borderdark hover:border-emerald-500 text-slate-300 transition" title="Settings">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+        </button>
+        <button onclick="generateQR()" class="px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 text-sm font-medium flex items-center gap-1 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+          QR
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-2xl mx-auto px-4 pt-6">
+    <!-- Title -->
+    <div class="mb-8 text-center">
+      <h1 class="text-2xl font-bold text-white mb-2">次世代アシストスーツ 試着体験アンケート</h1>
+      <p class="text-sm text-slate-400">率直なご感想をお聞かせください。<br>所要時間: 約2分</p>
+    </div>
+
+    <form id="surveyForm" onsubmit="submitForm(event)" class="space-y-6">
+      
+      <!-- Section 1: Basic Info -->
+      <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+        <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2 border-b border-borderdark pb-2">
+          <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+          基本情報・ご連絡先
+        </h2>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">お名前（または貴社名）<span class="text-red-400 ml-1">*</span></label>
+            <input type="text" name="name" required class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" placeholder="山田 太郎 / 株式会社サンプル">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">メールアドレス<span class="text-red-400 ml-1">*</span></label>
+            <input type="email" name="email" required class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" placeholder="example@domain.com">
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">業界カテゴリ</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <!-- Options generated via JS or hardcoded -->
+            <label class="relative cursor-pointer">
+              <input type="radio" name="industry" value="介護・福祉・医療" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
+              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
+                介護・福祉・医療 <span class="check-icon text-emerald-400">✓</span>
+              </div>
+            </label>
+            <label class="relative cursor-pointer">
+              <input type="radio" name="industry" value="農業・林業・水産業" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
+              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
+                農業・林業・水産業 <span class="check-icon text-emerald-400">✓</span>
+              </div>
+            </label>
+            <label class="relative cursor-pointer">
+              <input type="radio" name="industry" value="物流・運送・倉庫" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
+              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
+                物流・運送・倉庫 <span class="check-icon text-emerald-400">✓</span>
+              </div>
+            </label>
+            <label class="relative cursor-pointer">
+              <input type="radio" name="industry" value="建設・土木・製造" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
+              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
+                建設・土木・製造 <span class="check-icon text-emerald-400">✓</span>
+              </div>
+            </label>
+            <label class="relative cursor-pointer">
+              <input type="radio" name="industry" value="その他" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other', true)">
+              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
+                その他 <span class="check-icon text-emerald-400">✓</span>
+              </div>
+            </label>
+          </div>
+          <div id="industry_other" class="expandable">
+            <input type="text" name="industry_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="具体的な業界をご記入ください">
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">お役職・担当ポジション</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="cursor-pointer"><input type="radio" name="position" value="経営者・役員" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">経営者・役員</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="部署責任者・マネージャー" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">部署責任者</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="現場担当者・スタッフ" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">現場担当者</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="購買・調達担当者" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">購買・調達</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="その他" class="chip-input sr-only" onchange="toggleOther('position', 'position_other', true)"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">その他</div></label>
+          </div>
+          <div id="position_other" class="expandable">
+            <input type="text" name="position_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="役職をご記入ください">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">年齢</label>
+            <select name="age" class="w-full bg-darkbg border border-borderdark rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none appearance-none">
+              <option value="">選択してください</option>
+              <option value="20代以下">20代以下</option>
+              <option value="30代">30代</option>
+              <option value="40代">40代</option>
+              <option value="50代">50代</option>
+              <option value="60代">60代</option>
+              <option value="70代以上">70代以上</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">性別</label>
+            <select name="gender" class="w-full bg-darkbg border border-borderdark rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none appearance-none">
+              <option value="">選択してください</option>
+              <option value="男性">男性</option>
+              <option value="女性">女性</option>
+              <option value="回答しない">回答しない</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Usage & Fit -->
+      <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+        <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2 border-b border-borderdark pb-2">
+          <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+          利用シーン・装着感について
+        </h2>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">興味を持った理由・想定シーン <span class="text-xs text-slate-500 ml-1">(複数選択可)</span></label>
+          <div class="space-y-2">
+            <label class="block cursor-pointer"><input type="checkbox" name="scene" value="登山・ハイキング・トレッキング" class="chip-input sr-only"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">登山・ハイキング・トレッキング <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="scene" value="日常のウォーキング・散歩のサポート" class="chip-input sr-only"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">日常のウォーキング・散歩のサポート <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="scene" value="加齢による歩行不安・リハビリ・介護予防" class="chip-input sr-only"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">加齢による歩行不安・介護予防 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="scene" value="業務での身体負担軽減（腰・脚部など）" class="chip-input sr-only"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">業務での身体負担軽減（腰・足など） <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="scene" value="その他" class="chip-input sr-only" onchange="toggleCheckboxOther('scene', 'その他', 'scene_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">その他 <span class="check-icon text-emerald-400">✓</span></div></label>
+          </div>
+          <div id="scene_other" class="expandable">
+            <input type="text" name="scene_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="具体的なシーンをご記入ください">
+          </div>
+        </div>
+
+        <div class="space-y-4 pt-2">
+          <label class="block text-sm font-medium text-slate-300">装着のしやすさと重さ・フィット感</label>
+          
+          <div class="space-y-1.5">
+            <span class="text-xs text-slate-400">装着のしやすさ</span>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="cursor-pointer"><input type="radio" name="ease" value="とても簡単" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">とても簡単</div></label>
+              <label class="cursor-pointer"><input type="radio" name="ease" value="普通" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">普通</div></label>
+              <label class="cursor-pointer"><input type="radio" name="ease" value="難しい" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">難しい</div></label>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <span class="text-xs text-slate-400">重さ</span>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="cursor-pointer"><input type="radio" name="weight" value="非常に軽い" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">非常に軽い</div></label>
+              <label class="cursor-pointer"><input type="radio" name="weight" value="気にならない" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">気にならない</div></label>
+              <label class="cursor-pointer"><input type="radio" name="weight" value="やや重い" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">やや重い</div></label>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <span class="text-xs text-slate-400">締め付け・圧迫感</span>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="cursor-pointer"><input type="radio" name="fit" value="ちょうど良い" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">ちょうど良い</div></label>
+              <label class="cursor-pointer"><input type="radio" name="fit" value="やや痛い" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">やや痛い</div></label>
+              <label class="cursor-pointer"><input type="radio" name="fit" value="ズレやすい" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">ズレやすい</div></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Performance -->
+      <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+        <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2 border-b border-borderdark pb-2">
+          <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+          アシスト性能・違和感の検証
+        </h2>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">アシスト力（推進力）をどのように感じましたか？</label>
+          <div class="space-y-2">
+            <label class="block cursor-pointer"><input type="radio" name="power" value="感動するほど楽になった" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">感動するほど楽になった</div></label>
+            <label class="block cursor-pointer"><input type="radio" name="power" value="ほどよいサポート感がある" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">ほどよいサポート感がある</div></label>
+            <label class="block cursor-pointer"><input type="radio" name="power" value="少し強すぎる・急激に感じる" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">少し強すぎる・急激に感じる</div></label>
+            <label class="block cursor-pointer"><input type="radio" name="power" value="あまり効果を感じなかった" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">あまり効果を感じなかった</div></label>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <label class="block text-sm font-medium text-slate-300">機械と自分の動きが合わない（違和感）瞬間はありましたか？</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="cursor-pointer"><input type="radio" name="resistance" value="全くなかった" class="chip-input sr-only" onchange="toggleTiming(false)"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">全くなかった</div></label>
+            <label class="cursor-pointer"><input type="radio" name="resistance" value="少しあった" class="chip-input sr-only" onchange="toggleTiming(true)"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">少しあった</div></label>
+            <label class="cursor-pointer"><input type="radio" name="resistance" value="かなりあった" class="chip-input sr-only" onchange="toggleTiming(true)"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">かなりあった</div></label>
+          </div>
+          
+          <div id="resistance_timing" class="expandable bg-darkbg/50 p-4 rounded-xl border border-emerald-500/20">
+            <p class="text-xs text-emerald-400 mb-2">※どの動作で感じましたか？ (複数選択可)</p>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="cursor-pointer"><input type="checkbox" name="timing" value="歩き出し" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs text-slate-300">歩き出し</div></label>
+              <label class="cursor-pointer"><input type="checkbox" name="timing" value="急停止" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs text-slate-300">急停止</div></label>
+              <label class="cursor-pointer"><input type="checkbox" name="timing" value="方向転換" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs text-slate-300">方向転換</div></label>
+              <label class="cursor-pointer"><input type="checkbox" name="timing" value="階段・段差" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs text-slate-300">階段・段差</div></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Intent & Budget -->
+      <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+        <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2 border-b border-borderdark pb-2">
+          <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">4</span>
+          購入意欲・課題の検証
+        </h2>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">気になる点・改善してほしい点 <span class="text-xs text-slate-500 ml-1">(複数選択可)</span></label>
+          <div class="space-y-2">
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="デザイン・見た目" class="chip-input sr-only"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">デザイン・見た目 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="稼働音" class="chip-input sr-only"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">稼働音（モーター音） <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="安全性" class="chip-input sr-only"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">安全性 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="バッテリー" class="chip-input sr-only"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">バッテリーの持続時間 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="価格" class="chip-input sr-only"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">価格 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="特になし" class="chip-input sr-only"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">特になし <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="block cursor-pointer"><input type="checkbox" name="improvement" value="その他" class="chip-input sr-only" onchange="toggleCheckboxOther('improvement', 'その他', 'improvement_other')"><div class="chip-label flex justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">その他 <span class="check-icon text-emerald-400">✓</span></div></label>
+          </div>
+          <div id="improvement_other" class="expandable">
+            <input type="text" name="improvement_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="具体的な改善点をご記入ください">
+          </div>
+        </div>
+
+        <div class="space-y-4 pt-2">
+          <label class="block text-sm font-medium text-slate-300">導入・購入をご検討の場合</label>
+          
+          <div class="space-y-1.5">
+            <span class="text-xs text-slate-400">ご希望の形態</span>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="cursor-pointer"><input type="radio" name="purchase_option" value="個人購入" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">個人購入</div></label>
+              <label class="cursor-pointer"><input type="radio" name="purchase_option" value="レンタル・サブスク" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">レンタル等</div></label>
+              <label class="cursor-pointer"><input type="radio" name="purchase_option" value="法人・代理店" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">法人・代理店</div></label>
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <span class="text-xs text-slate-400">適正価格（ご予算）</span>
+            <div class="space-y-2">
+              <label class="block cursor-pointer"><input type="radio" name="price" value="5万〜10万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">5万円 〜 10万円</div></label>
+              <label class="block cursor-pointer"><input type="radio" name="price" value="10万〜20万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">10万円 〜 20万円</div></label>
+              <label class="block cursor-pointer"><input type="radio" name="price" value="20万〜30万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">20万円 〜 30万円</div></label>
+              <label class="block cursor-pointer"><input type="radio" name="price" value="30万〜50万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">30万円 〜 50万円</div></label>
+              <label class="block cursor-pointer"><input type="radio" name="price" value="50万以上" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-emerald-400 font-medium text-center">50万円以上（性能に見合えば検討）</div></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <label class="block text-sm font-medium text-slate-300">その他、ご意見・ご要望（自由記入）</label>
+          <textarea name="comments" rows="3" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none resize-none" placeholder="ご自由にお書きください"></textarea>
+        </div>
+      </section>
+
+      <!-- Submit Button -->
+      <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-darkbg font-bold rounded-xl text-lg shadow-lg shadow-emerald-500/20 transition transform active:scale-95 flex justify-center items-center gap-2">
+        <span>アンケートを送信する</span>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+      </button>
+    </form>
+
+    <!-- Success Message (Hidden) -->
+    <div id="successMsg" class="hidden text-center py-20">
+      <div class="w-20 h-20 mx-auto bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mb-6">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+      </div>
+      <h2 class="text-2xl font-bold text-white mb-2">ご回答ありがとうございました！</h2>
+      <p class="text-slate-400 mb-8">送信が完了しました。貴重なご意見を製品開発に活かしてまいります。</p>
+      <button onclick="location.reload()" class="px-6 py-2 rounded-lg border border-borderdark text-slate-300 hover:bg-cardbg transition">戻る</button>
+    </div>
+  </main>
+
+  <!-- Webhook Settings Modal -->
+  <div id="webhookModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-cardbg border border-borderdark rounded-2xl w-full max-w-md p-6 shadow-2xl transform transition-all">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+          Google Apps Script 設定
+        </h3>
+        <button onclick="closeModal('webhookModal')" class="text-slate-500 hover:text-white transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+        アンケート結果をGoogle Sheetsに自動送信するための Web App URL を入力してください。
+      </p>
+      <input type="url" id="webhookUrlInput" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none mb-4" placeholder="https://script.google.com/macros/s/.../exec">
+      <div class="flex justify-end gap-2">
+        <button onclick="closeModal('webhookModal')" class="px-4 py-2 rounded-lg text-sm text-slate-400 hover:bg-darkbg transition">キャンセル</button>
+        <button onclick="saveWebhook()" class="px-4 py-2 rounded-lg text-sm bg-emerald-500 text-darkbg font-bold hover:bg-emerald-400 transition">保存する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div id="qrModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-cardbg border border-borderdark rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-white">アンケート QRコード</h3>
+        <button onclick="closeModal('qrModal')" class="text-slate-500 hover:text-white transition">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="bg-white p-4 rounded-xl inline-block mx-auto mb-4" id="qrcode"></div>
+      <p class="text-xs text-slate-400 mb-4 break-all" id="qrUrlText"></p>
+      <button onclick="closeModal('qrModal')" class="w-full py-2 bg-slate-800 rounded-lg text-sm text-white hover:bg-slate-700 transition">閉じる</button>
+    </div>
+  </div>
+
+  <script>
+    // 展会用：把 Google Apps Script 网页应用 URL 填到这里后重新部署即可
+    // 设置步骤见 apps-script/Code.gs
+    const WEBHOOK_URL = '';
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedUrl = localStorage.getItem('survey_webhook_url') || WEBHOOK_URL;
+      if(savedUrl) {
+        document.getElementById('webhookUrlInput').value = savedUrl;
+      }
+    });
+
+    function getWebhookUrl() {
+      return (localStorage.getItem('survey_webhook_url') || WEBHOOK_URL || '').trim();
+    }
+
+    // Helper functions for conditionally revealing "Other" inputs
+    function toggleOther(radioName, targetId, isOther = false) {
+      const radios = document.getElementsByName(radioName);
+      let selectedValue = Array.from(radios).find(r => r.checked)?.value;
+      const target = document.getElementById(targetId);
+      
+      if(isOther || selectedValue === 'その他') {
+        target.classList.add('open');
+      } else {
+        target.classList.remove('open');
+      }
+    }
+
+    function toggleCheckboxOther(checkboxName, triggerValue, targetId) {
+      const checkboxes = document.getElementsByName(checkboxName);
+      const hasOther = Array.from(checkboxes).find(c => c.value === triggerValue && c.checked);
+      const target = document.getElementById(targetId);
+      
+      if(hasOther) {
+        target.classList.add('open');
+      } else {
+        target.classList.remove('open');
+      }
+    }
+
+    function toggleTiming(show) {
+      const target = document.getElementById('resistance_timing');
+      if(show) {
+        target.classList.add('open');
+      } else {
+        target.classList.remove('open');
+        // uncheck timing checkboxes if hidden
+        document.getElementsByName('timing').forEach(cb => cb.checked = false);
+      }
+    }
+
+    // Modal controls
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function saveWebhook() {
+      const url = document.getElementById('webhookUrlInput').value.trim();
+      localStorage.setItem('survey_webhook_url', url);
+      closeModal('webhookModal');
+      alert('Webhook URLを保存しました。');
+    }
+
+    // QR Code Generation
+    function generateQR() {
+      const currentUrl = window.location.href;
+      document.getElementById('qrcode').innerHTML = ''; // clear previous
+      new QRCode(document.getElementById("qrcode"), {
+        text: currentUrl,
+        width: 180,
+        height: 180,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+      });
+      document.getElementById('qrUrlText').innerText = currentUrl;
+      openModal('qrModal');
+    }
+
+    // Form Submission Logic
+    async function submitForm(e) {
+      e.preventDefault();
+      
+      const webhookUrl = getWebhookUrl();
+      if(!webhookUrl) {
+        alert("尚未配置数据收集地址。请管理员在右上角齿轮中填入 Google Apps Script Web App URL，或在 index.html 顶部设置 WEBHOOK_URL。");
+        return;
+      }
+
+      const form = document.getElementById('surveyForm');
+      const formData = new FormData(form);
+      const data = {};
+      
+      // Helper to get array for checkboxes
+      const getMulti = (name) => {
+        return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+      };
+
+      // Construct JSON payload
+      data.name = formData.get('name');
+      data.email = formData.get('email');
+      
+      data.industry = formData.get('industry');
+      if(data.industry === 'その他') data.industry += `: ${formData.get('industry_other_text')}`;
+      
+      data.position = formData.get('position');
+      if(data.position === 'その他') data.position += `: ${formData.get('position_other_text')}`;
+      
+      data.age = formData.get('age');
+      data.gender = formData.get('gender');
+      
+      let scenes = getMulti('scene');
+      if(scenes.includes('その他')) {
+        scenes = scenes.map(s => s === 'その他' ? `その他: ${formData.get('scene_other_text')}` : s);
+      }
+      data.scene = scenes.join(', ');
+      
+      data.ease = formData.get('ease');
+      data.weight = formData.get('weight');
+      data.fit = formData.get('fit');
+      data.power = formData.get('power');
+      
+      data.resistance = formData.get('resistance');
+      data.timing = getMulti('timing').join(', ');
+      
+      let improvements = getMulti('improvement');
+      if(improvements.includes('その他')) {
+        improvements = improvements.map(s => s === 'その他' ? `その他: ${formData.get('improvement_other_text')}` : s);
+      }
+      data.improvement = improvements.join(', ');
+      
+      data.purchase_option = formData.get('purchase_option');
+      data.price = formData.get('price');
+      data.comments = formData.get('comments');
+      
+      data.timestamp = new Date().toISOString();
+
+      // UI Update
+      const btn = document.getElementById('submitBtn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = `<span class="animate-pulse">送信中...</span>`;
+      btn.disabled = true;
+
+      try {
+        // Send data to GAS Web App
+        // Using no-cors mode allows the request to be sent blindly without CORS preflight failures from client side.
+        await fetch(webhookUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        // Hide form and show success
+        form.classList.add('hidden');
+        document.getElementById('successMsg').classList.remove('hidden');
+        window.scrollTo(0,0);
+
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        alert('送信に失敗しました。ネットワーク状況を確認するか、Webhook URLが正しいか確認してください。');
+      } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
