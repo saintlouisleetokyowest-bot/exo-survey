@@ -76,6 +76,34 @@
       opacity: 1;
       margin-top: 0.5rem;
     }
+
+    .star-btn {
+      background: transparent;
+      border: none;
+      padding: 0.15rem;
+      cursor: pointer;
+      line-height: 1;
+      transition: transform 0.15s ease;
+    }
+    .star-btn:active {
+      transform: scale(0.92);
+    }
+    .star-btn svg {
+      width: 2.25rem;
+      height: 2.25rem;
+      fill: transparent;
+      stroke: #64748b;
+      stroke-width: 1.5;
+      transition: fill 0.15s ease, stroke 0.15s ease, transform 0.15s ease;
+    }
+    .star-btn.active svg,
+    .star-btn.preview svg {
+      fill: #fbbf24;
+      stroke: #fbbf24;
+    }
+    .star-btn:hover {
+      transform: scale(1.08);
+    }
   </style>
 </head>
 <body class="min-h-screen pb-12 font-sans selection:bg-emerald-500 selection:text-white">
@@ -128,37 +156,19 @@
         <div class="space-y-3">
           <label class="block text-sm font-medium text-slate-300">業界カテゴリ</label>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <!-- Options generated via JS or hardcoded -->
-            <label class="relative cursor-pointer">
-              <input type="radio" name="industry" value="介護・福祉・医療" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
-              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
-                介護・福祉・医療 <span class="check-icon text-emerald-400">✓</span>
-              </div>
-            </label>
-            <label class="relative cursor-pointer">
-              <input type="radio" name="industry" value="農業・林業・水産業" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
-              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
-                農業・林業・水産業 <span class="check-icon text-emerald-400">✓</span>
-              </div>
-            </label>
-            <label class="relative cursor-pointer">
-              <input type="radio" name="industry" value="物流・運送・倉庫" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
-              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
-                物流・運送・倉庫 <span class="check-icon text-emerald-400">✓</span>
-              </div>
-            </label>
-            <label class="relative cursor-pointer">
-              <input type="radio" name="industry" value="建設・土木・製造" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other')">
-              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
-                建設・土木・製造 <span class="check-icon text-emerald-400">✓</span>
-              </div>
-            </label>
-            <label class="relative cursor-pointer">
-              <input type="radio" name="industry" value="その他" class="peer chip-input sr-only" onchange="toggleOther('industry', 'industry_other', true)">
-              <div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">
-                その他 <span class="check-icon text-emerald-400">✓</span>
-              </div>
-            </label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="介護・福祉・医療" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">介護・福祉・医療 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="農業・林業・水産業" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">農業・林業・水産業 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="物流・運送・倉庫" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">物流・運送・倉庫 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="建設・土木" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">建設・土木 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="製造・工場" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">製造・工場 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="小売・卸売・サービス" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">小売・卸売・サービス <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="教育・研究・大学" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">教育・研究・大学 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="スポーツ・アウトドア" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">スポーツ・アウトドア <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="観光・レジャー・イベント" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">観光・レジャー・イベント <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="IT・テクノロジー" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">IT・テクノロジー <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="官公庁・自治体・公共" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">官公庁・自治体・公共 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="個人・一般消費者" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">個人・一般消費者 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="その他" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other', true)"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">その他 <span class="check-icon text-emerald-400">✓</span></div></label>
           </div>
           <div id="industry_other" class="expandable">
             <input type="text" name="industry_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="具体的な業界をご記入ください">
@@ -341,6 +351,31 @@
           </div>
         </div>
 
+        <div class="space-y-3 pt-2 border-t border-borderdark">
+          <label class="block text-sm font-medium text-slate-300">総合満足度 <span class="text-red-400 ml-1">*</span></label>
+          <p class="text-xs text-slate-500">試着体験全体の満足度を星で評価してください</p>
+          <input type="hidden" name="satisfaction" id="satisfactionInput" value="">
+          <div class="flex items-center justify-center gap-1 sm:gap-2 py-2" id="starRating"
+               onmouseleave="previewStars(selectedSatisfaction)">
+            <button type="button" class="star-btn" data-value="1" onclick="setSatisfaction(1)" onmouseenter="previewStars(1)" aria-label="1星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="2" onclick="setSatisfaction(2)" onmouseenter="previewStars(2)" aria-label="2星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="3" onclick="setSatisfaction(3)" onmouseenter="previewStars(3)" aria-label="3星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="4" onclick="setSatisfaction(4)" onmouseenter="previewStars(4)" aria-label="4星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="5" onclick="setSatisfaction(5)" onmouseenter="previewStars(5)" aria-label="5星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+          </div>
+          <p id="satisfactionLabel" class="text-center text-sm text-slate-400 min-h-[1.25rem]">タップして評価</p>
+        </div>
+
         <div class="space-y-2 pt-2">
           <label class="block text-sm font-medium text-slate-300">その他、ご意見・ご要望（自由記入）</label>
           <textarea name="comments" rows="3" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none resize-none" placeholder="ご自由にお書きください"></textarea>
@@ -430,6 +465,38 @@
       document.getElementById(id).classList.add('hidden');
     }
 
+    const SATISFACTION_LABELS = {
+      1: '非常に不満',
+      2: 'やや不満',
+      3: '普通',
+      4: '満足',
+      5: '非常に満足'
+    };
+    let selectedSatisfaction = 0;
+
+    function previewStars(value) {
+      document.querySelectorAll('#starRating .star-btn').forEach((btn) => {
+        btn.classList.toggle('active', Number(btn.dataset.value) <= value);
+      });
+      const label = document.getElementById('satisfactionLabel');
+      if (value > 0) {
+        label.textContent = `${value} / 5 〜 ${SATISFACTION_LABELS[value]}`;
+        label.classList.add('text-amber-300');
+        label.classList.remove('text-slate-400');
+      } else {
+        label.textContent = 'タップして評価';
+        label.classList.remove('text-amber-300');
+        label.classList.add('text-slate-400');
+      }
+    }
+
+    function setSatisfaction(value) {
+      selectedSatisfaction = value;
+      document.getElementById('satisfactionInput').value = String(value);
+      previewStars(value);
+      hideFormError();
+    }
+
     // QR Code Generation
     function generateQR() {
       const currentUrl = window.location.href;
@@ -482,6 +549,10 @@
         showFormError('正しいメールアドレスを入力してください。', emailInput);
         return;
       }
+      if (!selectedSatisfaction) {
+        showFormError('総合満足度を星で評価してください。', document.getElementById('starRating'));
+        return;
+      }
 
       const formData = new FormData(form);
       
@@ -525,6 +596,7 @@
         improvement: improvements.join(', '),
         purchase_option: formData.get('purchase_option') || '',
         price: formData.get('price') || '',
+        satisfaction: `${selectedSatisfaction}/5（${SATISFACTION_LABELS[selectedSatisfaction]}）`,
         comments: formData.get('comments') || '',
         timestamp: new Date().toISOString()
       };
