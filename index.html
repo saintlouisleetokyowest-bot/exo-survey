@@ -90,9 +90,6 @@
         <span class="font-bold text-sm tracking-wider text-gray-100 hidden sm:block">EXO-SURVEY</span>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="openModal('webhookModal')" class="p-2 rounded-lg bg-cardbg border border-borderdark hover:border-emerald-500 text-slate-300 transition" title="Settings">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-        </button>
         <button onclick="generateQR()" class="px-3 py-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 text-sm font-medium flex items-center gap-1 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
           QR
@@ -368,29 +365,6 @@
     </div>
   </main>
 
-  <!-- Webhook Settings Modal -->
-  <div id="webhookModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-cardbg border border-borderdark rounded-2xl w-full max-w-md p-6 shadow-2xl transform transition-all">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-          <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          Google Apps Script 設定
-        </h3>
-        <button onclick="closeModal('webhookModal')" class="text-slate-500 hover:text-white transition">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-      </div>
-      <p class="text-xs text-slate-400 mb-4 leading-relaxed">
-        アンケート結果をGoogle Sheetsに自動送信するための Web App URL を入力してください。
-      </p>
-      <input type="url" id="webhookUrlInput" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none mb-4" placeholder="https://script.google.com/macros/s/.../exec">
-      <div class="flex justify-end gap-2">
-        <button onclick="closeModal('webhookModal')" class="px-4 py-2 rounded-lg text-sm text-slate-400 hover:bg-darkbg transition">キャンセル</button>
-        <button onclick="saveWebhook()" class="px-4 py-2 rounded-lg text-sm bg-emerald-500 text-darkbg font-bold hover:bg-emerald-400 transition">保存する</button>
-      </div>
-    </div>
-  </div>
-
   <!-- QR Code Modal -->
   <div id="qrModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-cardbg border border-borderdark rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center">
@@ -407,22 +381,9 @@
   </div>
 
   <script>
-    // 展会用：把 Google Apps Script 网页应用 URL 填到这里后重新部署即可
-    // 设置步骤见 apps-script/Code.gs 与 README.md
-    // 例: 'https://script.google.com/macros/s/XXXX/exec'
-    const WEBHOOK_URL = '';
-
-    // Initialize
-    document.addEventListener("DOMContentLoaded", () => {
-      const savedUrl = localStorage.getItem('survey_webhook_url') || WEBHOOK_URL;
-      if(savedUrl) {
-        document.getElementById('webhookUrlInput').value = savedUrl;
-      }
-    });
-
-    function getWebhookUrl() {
-      return (localStorage.getItem('survey_webhook_url') || WEBHOOK_URL || '').trim();
-    }
+    // 答卷会发到这个邮箱（表格样式邮件）。首次使用请到邮箱点一次确认链接。
+    const COLLECT_EMAIL = 'saintlouislee.tokyowest@gmail.com';
+    const SUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${COLLECT_EMAIL}`;
 
     // Helper functions for conditionally revealing "Other" inputs
     function toggleOther(radioName, targetId, isOther = false) {
@@ -468,13 +429,6 @@
       document.getElementById(id).classList.add('hidden');
     }
 
-    function saveWebhook() {
-      const url = document.getElementById('webhookUrlInput').value.trim();
-      localStorage.setItem('survey_webhook_url', url);
-      closeModal('webhookModal');
-      alert('Webhook URLを保存しました。');
-    }
-
     // QR Code Generation
     function generateQR() {
       const currentUrl = window.location.href;
@@ -494,87 +448,81 @@
     // Form Submission Logic
     async function submitForm(e) {
       e.preventDefault();
-      
-      const webhookUrl = getWebhookUrl();
-      if(!webhookUrl) {
-        alert("尚未配置数据收集地址。请管理员在右上角齿轮中填入 Google Apps Script Web App URL，或在 index.html 顶部设置 WEBHOOK_URL。");
-        return;
-      }
 
       const form = document.getElementById('surveyForm');
       const formData = new FormData(form);
-      const data = {};
       
-      // Helper to get array for checkboxes
       const getMulti = (name) => {
         return Array.from(form.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
       };
 
-      // Construct JSON payload
-      data.name = formData.get('name');
-      data.email = formData.get('email');
-      
-      data.industry = formData.get('industry');
-      if(data.industry === 'その他') data.industry += `: ${formData.get('industry_other_text')}`;
-      
-      data.position = formData.get('position');
-      if(data.position === 'その他') data.position += `: ${formData.get('position_other_text')}`;
-      
-      data.age = formData.get('age');
-      data.gender = formData.get('gender');
-      
-      let scenes = getMulti('scene');
-      if(scenes.includes('その他')) {
-        scenes = scenes.map(s => s === 'その他' ? `その他: ${formData.get('scene_other_text')}` : s);
-      }
-      data.scene = scenes.join(', ');
-      
-      data.ease = formData.get('ease');
-      data.weight = formData.get('weight');
-      data.fit = formData.get('fit');
-      data.power = formData.get('power');
-      
-      data.resistance = formData.get('resistance');
-      data.timing = getMulti('timing').join(', ');
-      
-      let improvements = getMulti('improvement');
-      if(improvements.includes('その他')) {
-        improvements = improvements.map(s => s === 'その他' ? `その他: ${formData.get('improvement_other_text')}` : s);
-      }
-      data.improvement = improvements.join(', ');
-      
-      data.purchase_option = formData.get('purchase_option');
-      data.price = formData.get('price');
-      data.comments = formData.get('comments');
-      
-      data.timestamp = new Date().toISOString();
+      let industry = formData.get('industry') || '';
+      if (industry === 'その他') industry += `: ${formData.get('industry_other_text') || ''}`;
 
-      // UI Update
+      let position = formData.get('position') || '';
+      if (position === 'その他') position += `: ${formData.get('position_other_text') || ''}`;
+
+      let scenes = getMulti('scene');
+      if (scenes.includes('その他')) {
+        scenes = scenes.map(s => s === 'その他' ? `その他: ${formData.get('scene_other_text') || ''}` : s);
+      }
+
+      let improvements = getMulti('improvement');
+      if (improvements.includes('その他')) {
+        improvements = improvements.map(s => s === 'その他' ? `その他: ${formData.get('improvement_other_text') || ''}` : s);
+      }
+
+      const data = {
+        _subject: '【展会问卷】次世代アシストスーツ 新しい回答',
+        _template: 'table',
+        _captcha: 'false',
+        name: formData.get('name'),
+        email: formData.get('email'),
+        industry,
+        position,
+        age: formData.get('age') || '',
+        gender: formData.get('gender') || '',
+        scene: scenes.join(', '),
+        ease: formData.get('ease') || '',
+        weight: formData.get('weight') || '',
+        fit: formData.get('fit') || '',
+        power: formData.get('power') || '',
+        resistance: formData.get('resistance') || '',
+        timing: getMulti('timing').join(', '),
+        improvement: improvements.join(', '),
+        purchase_option: formData.get('purchase_option') || '',
+        price: formData.get('price') || '',
+        comments: formData.get('comments') || '',
+        timestamp: new Date().toISOString()
+      };
+
       const btn = document.getElementById('submitBtn');
       const originalText = btn.innerHTML;
       btn.innerHTML = `<span class="animate-pulse">送信中...</span>`;
       btn.disabled = true;
 
       try {
-        // Send data to GAS Web App
-        // Using no-cors mode allows the request to be sent blindly without CORS preflight failures from client side.
-        await fetch(webhookUrl, {
+        const res = await fetch(SUBMIT_ENDPOINT, {
           method: 'POST',
-          mode: 'no-cors',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
           },
           body: JSON.stringify(data)
         });
 
-        // Hide form and show success
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          throw new Error(result.message || 'submit failed');
+        }
+
         form.classList.add('hidden');
         document.getElementById('successMsg').classList.remove('hidden');
         window.scrollTo(0,0);
 
       } catch (error) {
         console.error('Error submitting form:', error);
-        alert('送信に失敗しました。ネットワーク状況を確認するか、Webhook URLが正しいか確認してください。');
+        alert('送信に失敗しました。ネットワーク状況を確認して、もう一度お試しください。');
       } finally {
         btn.innerHTML = originalText;
         btn.disabled = false;
