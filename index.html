@@ -282,30 +282,6 @@
           </div>
         </div>
 
-        <div class="space-y-4 pt-2">
-          <label class="block text-sm font-medium text-slate-300">導入・購入をご検討の場合</label>
-          
-          <div class="space-y-1.5">
-            <span class="text-xs text-slate-400">ご希望の形態</span>
-            <div class="grid grid-cols-3 gap-2">
-              <label class="cursor-pointer"><input type="radio" name="purchase_option" value="個人購入" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">個人購入</div></label>
-              <label class="cursor-pointer"><input type="radio" name="purchase_option" value="レンタル・サブスク" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">レンタル等</div></label>
-              <label class="cursor-pointer"><input type="radio" name="purchase_option" value="法人・代理店" class="chip-input sr-only"><div class="chip-label text-center py-2 border border-borderdark rounded-xl bg-cardbg text-xs sm:text-sm text-slate-300">法人・代理店</div></label>
-            </div>
-          </div>
-
-          <div class="space-y-1.5">
-            <span class="text-xs text-slate-400">適正価格（ご予算）</span>
-            <div class="space-y-2">
-              <label class="block cursor-pointer"><input type="radio" name="price" value="30万〜40万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">30万円 〜 40万円</div></label>
-              <label class="block cursor-pointer"><input type="radio" name="price" value="40万〜50万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">40万円 〜 50万円</div></label>
-              <label class="block cursor-pointer"><input type="radio" name="price" value="50万〜60万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">50万円 〜 60万円</div></label>
-              <label class="block cursor-pointer"><input type="radio" name="price" value="60万〜70万" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 text-center">60万円 〜 70万円</div></label>
-              <label class="block cursor-pointer"><input type="radio" name="price" value="70万以上" class="chip-input sr-only"><div class="chip-label p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-emerald-400 font-medium text-center">70万円以上（性能に見合えば検討）</div></label>
-            </div>
-          </div>
-        </div>
-
         <div class="space-y-2 pt-2">
           <label class="block text-sm font-medium text-slate-300">その他、ご意見・ご要望（自由記入）</label>
           <textarea name="comments" rows="3" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none resize-none" placeholder="ご自由にお書きください"></textarea>
@@ -603,8 +579,6 @@
         resistance: formData.get('resistance') || '',
         timing: getMulti('timing').join(', '),
         improvement: improvements.join(', '),
-        purchase_option: formData.get('purchase_option') || '',
-        price: formData.get('price') || '',
         satisfaction: `${selectedSatisfaction}/5（${SATISFACTION_LABELS[selectedSatisfaction]}）`,
         comments: formData.get('comments') || '',
         timestamp: new Date().toISOString()
