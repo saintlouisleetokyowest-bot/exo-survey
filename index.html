@@ -135,83 +135,38 @@
 
     <form id="surveyForm" onsubmit="submitForm(event)" class="space-y-6" novalidate>
       
-      <!-- Section 1: Basic Info -->
+      <!-- Section 1: Overall Satisfaction -->
       <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
         <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2 border-b border-borderdark pb-2">
           <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
-          基本情報・ご連絡先
+          総合満足度
         </h2>
 
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-slate-300 mb-1">お名前（または貴社名）<span class="text-red-400 ml-1">*</span></label>
-            <input type="text" name="name" required class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" placeholder="山田 太郎 / 株式会社サンプル">
+        <div class="space-y-3 ">
+          <label class="block text-sm font-medium text-slate-300">試着体験全体の満足度 <span class="text-red-400 ml-1">*</span></label>
+          <p class="text-xs text-slate-500">試着体験全体の満足度を星で評価してください</p>
+          <input type="hidden" name="satisfaction" id="satisfactionInput" value="">
+          <div class="flex items-center justify-center gap-1 sm:gap-2 py-2" id="starRating"
+               onmouseleave="previewStars(selectedSatisfaction)">
+            <button type="button" class="star-btn" data-value="1" onclick="setSatisfaction(1)" onmouseenter="previewStars(1)" aria-label="1星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="2" onclick="setSatisfaction(2)" onmouseenter="previewStars(2)" aria-label="2星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="3" onclick="setSatisfaction(3)" onmouseenter="previewStars(3)" aria-label="3星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="4" onclick="setSatisfaction(4)" onmouseenter="previewStars(4)" aria-label="4星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
+            <button type="button" class="star-btn" data-value="5" onclick="setSatisfaction(5)" onmouseenter="previewStars(5)" aria-label="5星">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </button>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-slate-300 mb-1">メールアドレス<span class="text-red-400 ml-1">*</span></label>
-            <input type="email" name="email" required class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" placeholder="example@domain.com">
-          </div>
+          <p id="satisfactionLabel" class="text-center text-sm text-slate-400 min-h-[1.25rem]">タップして評価</p>
         </div>
 
-        <div class="space-y-3">
-          <label class="block text-sm font-medium text-slate-300">業界カテゴリ</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="介護・福祉・医療" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">介護・福祉・医療 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="農業・林業・水産業" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">農業・林業・水産業 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="物流・運送・倉庫" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">物流・運送・倉庫 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="建設・土木" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">建設・土木 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="製造・工場" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">製造・工場 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="小売・卸売・サービス" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">小売・卸売・サービス <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="教育・研究・大学" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">教育・研究・大学 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="スポーツ・アウトドア" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">スポーツ・アウトドア <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="観光・レジャー・イベント" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">観光・レジャー・イベント <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="IT・テクノロジー" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">IT・テクノロジー <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="官公庁・自治体・公共" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">官公庁・自治体・公共 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="個人・一般消費者" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">個人・一般消費者 <span class="check-icon text-emerald-400">✓</span></div></label>
-            <label class="relative cursor-pointer"><input type="radio" name="industry" value="その他" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other', true)"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">その他 <span class="check-icon text-emerald-400">✓</span></div></label>
-          </div>
-          <div id="industry_other" class="expandable">
-            <input type="text" name="industry_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="具体的な業界をご記入ください">
-          </div>
-        </div>
-
-        <div class="space-y-3">
-          <label class="block text-sm font-medium text-slate-300">お役職・担当ポジション</label>
-          <div class="grid grid-cols-2 gap-2">
-            <label class="cursor-pointer"><input type="radio" name="position" value="経営者・役員" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">経営者・役員</div></label>
-            <label class="cursor-pointer"><input type="radio" name="position" value="部署責任者・マネージャー" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">部署責任者</div></label>
-            <label class="cursor-pointer"><input type="radio" name="position" value="現場担当者・スタッフ" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">現場担当者</div></label>
-            <label class="cursor-pointer"><input type="radio" name="position" value="購買・調達担当者" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">購買・調達</div></label>
-            <label class="cursor-pointer"><input type="radio" name="position" value="その他" class="chip-input sr-only" onchange="toggleOther('position', 'position_other', true)"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">その他</div></label>
-          </div>
-          <div id="position_other" class="expandable">
-            <input type="text" name="position_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="役職をご記入ください">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-slate-300 mb-1">年齢</label>
-            <select name="age" class="w-full bg-darkbg border border-borderdark rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none appearance-none">
-              <option value="">選択してください</option>
-              <option value="20代以下">20代以下</option>
-              <option value="30代">30代</option>
-              <option value="40代">40代</option>
-              <option value="50代">50代</option>
-              <option value="60代">60代</option>
-              <option value="70代以上">70代以上</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-slate-300 mb-1">性別</label>
-            <select name="gender" class="w-full bg-darkbg border border-borderdark rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none appearance-none">
-              <option value="">選択してください</option>
-              <option value="男性">男性</option>
-              <option value="女性">女性</option>
-              <option value="回答しない">回答しない</option>
-            </select>
-          </div>
-        </div>
       </section>
 
       <!-- Section 2: Usage & Fit -->
@@ -351,34 +306,88 @@
           </div>
         </div>
 
-        <div class="space-y-3 pt-2 border-t border-borderdark">
-          <label class="block text-sm font-medium text-slate-300">総合満足度 <span class="text-red-400 ml-1">*</span></label>
-          <p class="text-xs text-slate-500">試着体験全体の満足度を星で評価してください</p>
-          <input type="hidden" name="satisfaction" id="satisfactionInput" value="">
-          <div class="flex items-center justify-center gap-1 sm:gap-2 py-2" id="starRating"
-               onmouseleave="previewStars(selectedSatisfaction)">
-            <button type="button" class="star-btn" data-value="1" onclick="setSatisfaction(1)" onmouseenter="previewStars(1)" aria-label="1星">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </button>
-            <button type="button" class="star-btn" data-value="2" onclick="setSatisfaction(2)" onmouseenter="previewStars(2)" aria-label="2星">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </button>
-            <button type="button" class="star-btn" data-value="3" onclick="setSatisfaction(3)" onmouseenter="previewStars(3)" aria-label="3星">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </button>
-            <button type="button" class="star-btn" data-value="4" onclick="setSatisfaction(4)" onmouseenter="previewStars(4)" aria-label="4星">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </button>
-            <button type="button" class="star-btn" data-value="5" onclick="setSatisfaction(5)" onmouseenter="previewStars(5)" aria-label="5星">
-              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </button>
-          </div>
-          <p id="satisfactionLabel" class="text-center text-sm text-slate-400 min-h-[1.25rem]">タップして評価</p>
-        </div>
-
         <div class="space-y-2 pt-2">
           <label class="block text-sm font-medium text-slate-300">その他、ご意見・ご要望（自由記入）</label>
           <textarea name="comments" rows="3" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-sm text-white focus:border-emerald-500 outline-none resize-none" placeholder="ご自由にお書きください"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 5: Basic Info -->
+      <section class="glass-card rounded-2xl p-5 sm:p-6 space-y-5">
+        <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2 border-b border-borderdark pb-2">
+          <span class="bg-emerald-500/20 text-emerald-400 w-6 h-6 rounded-full flex items-center justify-center text-xs">5</span>
+          基本情報・ご連絡先
+        </h2>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">お名前（または貴社名）<span class="text-red-400 ml-1">*</span></label>
+            <input type="text" name="name" required class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" placeholder="山田 太郎 / 株式会社サンプル">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">メールアドレス<span class="text-red-400 ml-1">*</span></label>
+            <input type="email" name="email" required class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition" placeholder="example@domain.com">
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">業界カテゴリ</label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="介護・福祉・医療" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">介護・福祉・医療 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="農業・林業・水産業" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">農業・林業・水産業 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="物流・運送・倉庫" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">物流・運送・倉庫 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="建設・土木" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">建設・土木 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="製造・工場" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">製造・工場 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="小売・卸売・サービス" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">小売・卸売・サービス <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="教育・研究・大学" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">教育・研究・大学 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="スポーツ・アウトドア" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">スポーツ・アウトドア <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="観光・レジャー・イベント" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">観光・レジャー・イベント <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="IT・テクノロジー" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">IT・テクノロジー <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="官公庁・自治体・公共" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">官公庁・自治体・公共 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="個人・一般消費者" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other')"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">個人・一般消費者 <span class="check-icon text-emerald-400">✓</span></div></label>
+            <label class="relative cursor-pointer"><input type="radio" name="industry" value="その他" class="chip-input sr-only" onchange="toggleOther('industry', 'industry_other', true)"><div class="chip-label flex items-center justify-between p-3 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300 hover:border-slate-500 transition">その他 <span class="check-icon text-emerald-400">✓</span></div></label>
+          </div>
+          <div id="industry_other" class="expandable">
+            <input type="text" name="industry_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="具体的な業界をご記入ください">
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-slate-300">お役職・担当ポジション</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="cursor-pointer"><input type="radio" name="position" value="経営者・役員" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">経営者・役員</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="部署責任者・マネージャー" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">部署責任者</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="現場担当者・スタッフ" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">現場担当者</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="購買・調達担当者" class="chip-input sr-only" onchange="toggleOther('position', 'position_other')"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">購買・調達</div></label>
+            <label class="cursor-pointer"><input type="radio" name="position" value="その他" class="chip-input sr-only" onchange="toggleOther('position', 'position_other', true)"><div class="chip-label text-center p-2.5 border border-borderdark rounded-xl bg-cardbg text-sm text-slate-300">その他</div></label>
+          </div>
+          <div id="position_other" class="expandable">
+            <input type="text" name="position_other_text" class="w-full bg-darkbg border border-borderdark rounded-xl px-4 py-2 text-sm text-white focus:border-emerald-500 outline-none" placeholder="役職をご記入ください">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">年齢</label>
+            <select name="age" class="w-full bg-darkbg border border-borderdark rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none appearance-none">
+              <option value="">選択してください</option>
+              <option value="20代以下">20代以下</option>
+              <option value="30代">30代</option>
+              <option value="40代">40代</option>
+              <option value="50代">50代</option>
+              <option value="60代">60代</option>
+              <option value="70代以上">70代以上</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-1">性別</label>
+            <select name="gender" class="w-full bg-darkbg border border-borderdark rounded-xl px-3 py-2.5 text-sm text-white focus:border-emerald-500 outline-none appearance-none">
+              <option value="">選択してください</option>
+              <option value="男性">男性</option>
+              <option value="女性">女性</option>
+              <option value="回答しない">回答しない</option>
+            </select>
+          </div>
         </div>
       </section>
 
